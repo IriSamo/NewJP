@@ -6,6 +6,7 @@ import java.util.Properties;
 
 public class ProjectProperties {
 
+    private static final String ENV_WEB_OPTIONS = "WEB_OPTIONS";
     private static final String ENV_BROWSER_OPTIONS = "BROWSER_OPTIONS";
 
     public static Properties properties = init_properties();
@@ -27,6 +28,12 @@ public class ProjectProperties {
                     for (String option : System.getenv(ENV_BROWSER_OPTIONS).split(";")) {
                         String[] browserOptionArr = option.split("=");
                         properties.setProperty(browserOptionArr[0], browserOptionArr[1]);
+                    }
+                }
+                if (System.getenv(ENV_WEB_OPTIONS) != null) {
+                    for (String option : System.getenv(ENV_WEB_OPTIONS).split(";")) {
+                        String[] webOptionArr = option.split("=");
+                        properties.setProperty(webOptionArr[0], webOptionArr[1]);
                     }
                 }
             } else {
