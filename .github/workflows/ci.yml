@@ -27,7 +27,7 @@ jobs:
           CI_RUN: true
 
       - name: Create test report
-        uses: dorny/test-reporter@v1.8
+        uses: dorny/test-reporter@v1
         if: success() || failure()
         with:
           name: Test Execution Report
