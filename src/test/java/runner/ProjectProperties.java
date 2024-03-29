@@ -6,12 +6,13 @@ import java.util.Properties;
 
 public class ProjectProperties {
 
+    private static final String ENV_WEB_OPTIONS = "WEB_OPTIONS";
     private static final String ENV_BROWSER_OPTIONS = "BROWSER_OPTIONS";
 
     public static Properties properties = init_properties();
 
     public static final String BROWSER_TYPE = properties.getProperty("browserType").trim();
-    public static final String BASE_URL = properties.getProperty("baseURL");
+    public static final String BASE_URL = properties.getProperty("baseURL").trim();
     public static final boolean HEADLESS_MODE = Boolean.parseBoolean(properties.getProperty("headlessMode").trim());
     public static final double SLOW_MO_MODE = Double.parseDouble(properties.getProperty("slowMoMode").trim());
     public static final int SCREEN_SIZE_WIDTH = Integer.parseInt(properties.getProperty("screenSizeWidth").trim());
@@ -23,6 +24,12 @@ public class ProjectProperties {
         if (properties == null) {
             properties = new Properties();
             if (isServerRun()) {
+                if (System.getenv(ENV_WEB_OPTIONS) != null) {
+                    for (String option : System.getenv(ENV_WEB_OPTIONS).split(";")) {
+                        String[] webOptionArr = option.split("=");
+                        properties.setProperty(webOptionArr[0], webOptionArr[1]);
+                    }
+                }
                 if (System.getenv(ENV_BROWSER_OPTIONS) != null) {
                     for (String option : System.getenv(ENV_BROWSER_OPTIONS).split(";")) {
                         String[] browserOptionArr = option.split("=");
@@ -33,7 +40,7 @@ public class ProjectProperties {
                 try {
                     FileInputStream fileInputStream = new FileInputStream("./src/test/resources/config/config.properties");
                     properties.load(fileInputStream);
-                } catch (IOException ignore) {
+                } catch (IOException e) {
                     System.out.println("ERROR: The \u001B[31mconfig.properties\u001B[0m file not found.");
                     System.out.println("You need to create it from config.properties.TEMPLATE file.");
                     System.exit(1);
