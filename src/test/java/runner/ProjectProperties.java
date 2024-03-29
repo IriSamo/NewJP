@@ -24,16 +24,16 @@ public class ProjectProperties {
         if (properties == null) {
             properties = new Properties();
             if (isServerRun()) {
-                if (System.getenv(ENV_BROWSER_OPTIONS) != null) {
-                    for (String option : System.getenv(ENV_BROWSER_OPTIONS).split(";")) {
-                        String[] browserOptionArr = option.split("=");
-                        properties.setProperty(browserOptionArr[0], browserOptionArr[1]);
-                    }
-                }
                 if (System.getenv(ENV_WEB_OPTIONS) != null) {
                     for (String option : System.getenv(ENV_WEB_OPTIONS).split(";")) {
                         String[] webOptionArr = option.split("=");
                         properties.setProperty(webOptionArr[0], webOptionArr[1]);
+                    }
+                }
+                if (System.getenv(ENV_BROWSER_OPTIONS) != null) {
+                    for (String option : System.getenv(ENV_BROWSER_OPTIONS).split(";")) {
+                        String[] browserOptionArr = option.split("=");
+                        properties.setProperty(browserOptionArr[0], browserOptionArr[1]);
                     }
                 }
             } else {
