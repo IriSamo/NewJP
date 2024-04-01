@@ -6,7 +6,7 @@ import java.util.Properties;
 
 public class ProjectProperties {
 
-    private static final String ENV_WEB_OPTIONS = "WEB_OPTIONS";
+    private static final String ENV_ACCESS_OPTIONS = "ACCESS_OPTIONS";
     private static final String ENV_BROWSER_OPTIONS = "BROWSER_OPTIONS";
 
     public static Properties properties = init_properties();
@@ -24,8 +24,8 @@ public class ProjectProperties {
         if (properties == null) {
             properties = new Properties();
             if (isServerRun()) {
-                if (System.getenv(ENV_WEB_OPTIONS) != null) {
-                    for (String option : System.getenv(ENV_WEB_OPTIONS).split(";")) {
+                if (System.getenv(ENV_ACCESS_OPTIONS) != null) {
+                    for (String option : System.getenv(ENV_ACCESS_OPTIONS).split(";")) {
                         String[] webOptionArr = option.split("=");
                         properties.setProperty(webOptionArr[0], webOptionArr[1]);
                     }
@@ -37,13 +37,17 @@ public class ProjectProperties {
                     }
                 }
             } else {
-                try {
-                    FileInputStream fileInputStream = new FileInputStream("./src/test/resources/config/config.properties");
-                    properties.load(fileInputStream);
-                } catch (IOException e) {
-                    System.out.println("ERROR: The \u001B[31mconfig.properties\u001B[0m file not found.");
-                    System.out.println("You need to create it from config.properties.TEMPLATE file.");
-                    System.exit(1);
+                String[] fileNames = {"browser.properties", "access.properties"};
+
+                for (String fileName : fileNames) {
+                    try {
+                        FileInputStream fileInputStream = new FileInputStream("./src/test/resources/" + fileName);
+                        properties.load(fileInputStream);
+                    } catch (IOException e) {
+                        System.out.println("ERROR: The \u001B[31m" + fileName + "\u001B[0m file not found.");
+                        System.out.println("You need to create it from " + fileName + ".TEMPLATE file.");
+                        System.exit(1);
+                    }
                 }
             }
         }
